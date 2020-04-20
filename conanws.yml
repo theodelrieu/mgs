@@ -1,0 +1,26 @@
+editables:
+  mgs_base16/0.1.0:
+    path: base16
+  mgs_base32/0.1.0:
+    path: base32
+  mgs_base32hex/0.1.0:
+    path: base32hex
+  mgs_base64/0.1.0:
+    path: base64
+  mgs_base64url/0.1.0:
+    path: base64url
+  mgs_base_n/0.1.0:
+    path: base_n
+  mgs_codecs/0.1.0:
+    path: codecs
+  mgs_exceptions/0.1.0:
+    path: exceptions
+  mgs_meta/0.1.0:
+    path: meta
+  mgs_cmake/0.1.0:
+    path: cmake
+  mgs_config/0.1.0:
+    path: config
+workspace_generator: cmake
+layout: mgs_layout
+root: mgs_base16/0.1.0, mgs_base32/0.1.0, mgs_base32hex/0.1.0, mgs_base64/0.1.0, mgs_base64url/0.1.0
