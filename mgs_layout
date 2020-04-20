@@ -1,0 +1,8 @@
+[build_folder]
+../build/{{reference.name}}/
+
+[source_folder]
+.
+
+[libdirs]
+../build/{{reference.name}}/lib

@@ -1,0 +1,9 @@
+[settings]
+os=Windows
+os_build=Windows
+build_type=Release
+arch_build=x86_64
+compiler=Visual Studio
+compiler.version=16
+compiler.runtime=MD
+arch=x86_64

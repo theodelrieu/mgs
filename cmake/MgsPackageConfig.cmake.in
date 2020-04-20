@@ -1,0 +1,3 @@
+@PACKAGE_INIT@
+
+include("@MGS_TARGETS_FILEPATH@")
