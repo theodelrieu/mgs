@@ -8,23 +8,23 @@ on:
 
 jobs:
   release:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - uses: lukka/get-cmake@latest
-    - uses: actions/setup-python@v1
-      with:
-        python-version: 3.6
-    - name: Install Conan
-      run: pip install conan==1.21.0
-    - name: Install source files
-      run: |
-        mkdir build && cd build
-        conan workspace install ..
-        cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=artifact -DBUILD_TESTING=OFF
-        ninja install
-    - uses: fnkr/github-action-ghr@v1
-      env:
-        GHR_COMPRESS: zip
-        GHR_PATH: build/artifact
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: lukka/get-cmake@latest
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install Conan
+        run: pip install conan==1.21.0
+      - name: Install source files
+        run: |
+          mkdir build && cd build
+          conan workspace install ..
+          cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=artifact -DBUILD_TESTING=OFF
+          ninja install
+      - uses: fnkr/github-action-ghr@v1
+        env:
+          GHR_COMPRESS: zip
+          GHR_PATH: build/artifact
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
