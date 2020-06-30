@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir build && cd build
           conan workspace install ..
-          cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=install/artifact -DBUILD_TESTING=OFF
+          cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=install/mgs -DBUILD_TESTING=OFF
           ninja install
       - uses: fnkr/github-action-ghr@v1
         env:
