@@ -42,7 +42,8 @@ ResizableOutputRange fill_resizable_output_range(
 
   // use max to force a read when max_remaining_size returns 0
   auto const max_size = is.max_remaining_size();
-  ResizableOutputRange ret(max_size, 0);
+  ResizableOutputRange ret;
+  ret.resize(max_size);
 
   auto to_read = std::max<mgs::ssize_t>(max_size, 1);
   auto it = begin(ret);
@@ -69,7 +70,8 @@ ResizableOutputRange fill_resizable_output_range(
 
   constexpr auto block_size = 256;
 
-  ResizableOutputRange ret(block_size, 0);
+  ResizableOutputRange ret;
+  ret.resize(block_size);
 
   auto total_read = size_type{0};
   auto it = begin(ret);
@@ -97,7 +99,7 @@ private:
             typename SizeType = typename R::size_type,
             typename = std::enable_if_t<
                 meta::is_default_constructible<R>::value &&
-                // Keep those in C++17 as well, fill_resizable_container
+                // Keep those in C++17 as well, fill_resizable_output_range
                 // relies on NRVO, not on Guaranteed Copy Elision.
                 (meta::is_copyable<R>::value || meta::is_movable<R>::value) &&
                 meta::is_detected<meta::detected::member_functions::resize,
