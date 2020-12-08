@@ -12,19 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: lukka/get-cmake@latest
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: '3.x'
       - name: Install ninja and g++
         run: sudo apt install ninja-build g++-8
       - name: Install Conan
-        run: pip install conan==1.21.0
+        run: pip install conan==1.32.0
       - name: Install source files
         run: |
           mkdir build && cd build
           conan workspace install ..
           cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=install/mgs -DBUILD_TESTING=OFF
           ninja install
+          cp ../LICENSE .
       - uses: fnkr/github-action-ghr@v1
         env:
           GHR_COMPRESS: zip
