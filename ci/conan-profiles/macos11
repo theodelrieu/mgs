@@ -1,0 +1,4 @@
+include(macos)
+[settings]
+os.version=11.0
+compiler.version=12.0

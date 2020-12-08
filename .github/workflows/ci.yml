@@ -61,7 +61,7 @@ jobs:
     - name: Install build tools
       run: brew install ninja
     - name: Build and test
-      run: python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/macos10.15
+      run: python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/macos11
   build-windows:
     runs-on: windows-latest
     strategy:
