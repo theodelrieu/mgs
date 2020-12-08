@@ -25,6 +25,7 @@ jobs:
           conan workspace install ..
           cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=install/mgs -DBUILD_TESTING=OFF
           ninja install
+          cp ../LICENSE .
       - uses: fnkr/github-action-ghr@v1
         env:
           GHR_COMPRESS: zip
