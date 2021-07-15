@@ -34,9 +34,9 @@ struct iterator_traits<invalid_iterator>
 
 TEST_CASE("iter_concept")
 {
-  static_assert(
-      std::is_same<iter_concept<char*>, std::random_access_iterator_tag>::value,
-      "");
+  static_assert(std::is_base_of<std::random_access_iterator_tag,
+                                iter_concept<char*>>::value,
+                "");
   static_assert(std::is_same<iter_concept<std::list<char>::iterator>,
                              std::bidirectional_iterator_tag>::value,
                 "");
@@ -50,11 +50,12 @@ TEST_CASE("iter_concept")
   static_assert(
       std::is_same<iter_concept<void*>, std::random_access_iterator_tag>::value,
       "");
-  static_assert(std::is_same<iter_concept<struct incomplete>,
-                             std::random_access_iterator_tag>::value,
+  // C++20 introduces contiguous iterators, use is_base_of instead of is_same
+  static_assert(std::is_base_of<std::random_access_iterator_tag,
+                                iter_concept<struct incomplete>>::value,
                 "");
-  static_assert(std::is_same<iter_concept<struct incomplete*>,
-                             std::random_access_iterator_tag>::value,
+  static_assert(std::is_base_of<std::random_access_iterator_tag,
+                                iter_concept<struct incomplete*>>::value,
                 "");
   static_assert(
       std::is_same<iter_traits<struct incomplete>, struct incomplete>::value,

@@ -8,8 +8,8 @@
 #include <mgs/meta/concepts/integral.hpp>
 #include <mgs/meta/concepts/same_as.hpp>
 
-#if MGS_HAS_CPP17
-#include <cstddef> 
+#ifdef MGS_HAS_CPP17
+#  include <cstddef>
 #endif
 
 namespace mgs
@@ -22,7 +22,7 @@ struct is_byte_type
   using requirements = std::tuple<>;
 
   static constexpr auto const value =
-#if MGS_HAS_CPP17
+#ifdef MGS_HAS_CPP17
       meta::is_same_as<std::byte, T>::value ||
 #endif
       (meta::is_integral<T>::value &&
