@@ -30,14 +30,19 @@ def install_conan_workspace(profile):
               )
 
 
-def build_and_test(profile, cxx17):
+def build_and_test(profile, cxx):
     root_path = Path(__file__).abspath().parent.parent
     build_path = root_path / "build"
     build_path.makedirs_p()
 
+
+    if cxx == None:
+        _cxx = "14"
+    else:
+        _cxx = cxx
     with build_path:
         install_conan_workspace(profile)
-        run_cmake("-GNinja", "..", "-DCMAKE_CXX_STANDARD=%s" % ("17" if cxx17 else "14"))
+        run_cmake("-GNinja", "..", "-DCMAKE_CXX_STANDARD=%s" % _cxx)
         run_cmake("--build", ".")
         run_cmake("--build", ".", "--target", "test")
 
@@ -48,11 +53,11 @@ def main():
 
     build_and_test_parser = subparsers.add_parser("build-and-test")
     build_and_test_parser.add_argument("--profile", required=True)
-    build_and_test_parser.add_argument("--cxx17", action="store_true")
+    build_and_test_parser.add_argument("--cxx")
     args = parser.parse_args()
 
     if args.command == "build-and-test":
-        build_and_test(Path(args.profile), args.cxx17)
+        build_and_test(Path(args.profile), args.cxx)
     else:
         parser.print_help()
         sys.exit(1)

@@ -1,3 +1,0 @@
-include(g++)
-[settings]
-compiler.version=5
