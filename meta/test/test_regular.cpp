@@ -3,9 +3,9 @@
 #include <catch2/catch.hpp>
 
 #include <mgs/meta/concepts/equality_comparable.hpp>
-#include <mgs/meta/concepts/swappable.hpp>
 #include <mgs/meta/concepts/regular.hpp>
 #include <mgs/meta/concepts/semiregular.hpp>
+#include <mgs/meta/concepts/swappable.hpp>
 
 using namespace mgs::meta;
 
@@ -28,6 +28,9 @@ struct almost_regular
 };
 
 bool operator==(almost_regular const&, almost_regular const&);
+
+// Have to explicitly delete it since C++20 introduces default comparisons
+bool operator!=(almost_regular const&, almost_regular const&) = delete;
 
 struct valid_regular
 {

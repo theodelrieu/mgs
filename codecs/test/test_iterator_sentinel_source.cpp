@@ -116,7 +116,8 @@ TEST_CASE("codecs::iterator_sentinel_source")
   SECTION("range")
   {
     static_assert(is_range<iterator_sentinel_source<char const*>>::value, "");
-    static_assert(is_semiregular<iterator_sentinel_source<char const*>>::value, "");
+    static_assert(is_semiregular<iterator_sentinel_source<char const*>>::value,
+                  "");
 
     auto source = make_iterator_sentinel_source("000");
     CHECK(std::count(source.begin(), source.end(), '0') == 3);

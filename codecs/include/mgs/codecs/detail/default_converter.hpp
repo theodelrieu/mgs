@@ -119,7 +119,7 @@ private:
             typename Iterator = meta::iterator_t<codecs::basic_input_range<T>>,
             typename = std::enable_if_t<
   // Guaranteed copy-elision
-#if MGS_HAS_CPP17
+#ifdef MGS_HAS_CPP17
                 (meta::is_move_constructible<R>::value ||
                  meta::is_copy_constructible<R>::value) &&
 #endif

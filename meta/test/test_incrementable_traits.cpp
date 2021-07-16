@@ -5,6 +5,7 @@
 
 #include <catch2/catch.hpp>
 
+#include <mgs/config.hpp>
 #include <mgs/meta/incrementable_traits.hpp>
 #include <mgs/meta/iter_difference_t.hpp>
 
@@ -49,9 +50,13 @@ TEST_CASE("incrementable_traits")
       "");
   static_assert(std::is_same<iter_difference_t<valid>, int>::value, "");
   static_assert(std::is_same<iter_difference_t<both>, char>::value, "");
+  // in C++20, difference_type should be std::ptrdiff_t, but it depends on
+  // compiler support, so skip this test for now
+#ifndef MGS_HAS_CPP20
   static_assert(
       std::is_same<
           iter_difference_t<std::back_insert_iterator<std::vector<int>>>,
           void>::value,
       "");
+#endif
 }

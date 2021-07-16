@@ -4,15 +4,15 @@ on:
   - pull_request
 
 env:
-  CONAN_VERSION: 1.32.0
+  CONAN_VERSION: 1.38.0
   PATH_VERSION: 13.1.0
 
 jobs:
   build-linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        compiler: [clang++-3.9, clang++-4.0, clang++-5.0, clang++-6.0, g++-5, g++-6, g++-7, g++-8]
+        compiler: [clang++-10, clang++-11, clang++-12, g++-8, g++-10]
     steps:
     - name: Setup Python environment
       uses: actions/setup-python@v2
@@ -23,15 +23,14 @@ jobs:
     - name: Install conan and path
       run: pip install conan==$CONAN_VERSION path==$PATH_VERSION --user
     - name: Install C++ compiler
-      # Already the default compiler on ubuntu 18.04
-      if: matrix.compiler != 'clang++-6.0'
+      if: matrix.compiler != 'clang++-12'
       run: sudo apt-get install ${{ matrix.compiler }}
     - name: Install build tools
       run: sudo apt-get install ninja-build
     - name: Build and test
       run: CXX=${{ matrix.compiler }} python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/${{ matrix.compiler }}
   build-linux-cxx17:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Setup Python environment
       uses: actions/setup-python@v2
@@ -46,7 +45,24 @@ jobs:
     - name: Install build tools
       run: sudo apt-get install ninja-build
     - name: Build and test
-      run: CXX=g++-8 python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/g++-8 --cxx17
+      run: CXX=g++-8 python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/g++-8 --cxx 17
+  build-linux-cxx20:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Install conan and path
+      run: pip install conan==$CONAN_VERSION path==$PATH_VERSION --user
+    - name: Install C++ compiler
+      run: sudo apt-get install g++-10
+    - name: Install build tools
+      run: sudo apt-get install ninja-build
+    - name: Build and test
+      run: CXX=g++-10 python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/g++-10 --cxx 20
   build-macos:
     runs-on: macos-latest
     steps:
@@ -89,3 +105,32 @@ jobs:
       run: |
         set CXX=cl
         "${{ matrix.vcvars_cmd }}" ${{ matrix.vcvars_args }} && python %GITHUB_WORKSPACE%/ci/run-ci.py build-and-test --profile %GITHUB_WORKSPACE%/ci/conan-profiles/${{ matrix.compiler }}
+
+  build-windows-cxx20:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler: [vs2019]
+        include:
+          - os: windows-latest
+            compiler: vs2019
+            vcvars_cmd: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat
+            vcvars_args: x64 10.0.18362.0
+
+    steps:
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install conan and path
+      run: pip install conan==$env:CONAN_VERSION path==$env:PATH_VERSION --user
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Install build tools
+      run: cinst ninja -y
+    - name: Build and test
+      shell: cmd
+      run: |
+        set CXX=cl
+        "${{ matrix.vcvars_cmd }}" ${{ matrix.vcvars_args }} && python %GITHUB_WORKSPACE%/ci/run-ci.py build-and-test --profile %GITHUB_WORKSPACE%/ci/conan-profiles/vs2019-cxx20
+
