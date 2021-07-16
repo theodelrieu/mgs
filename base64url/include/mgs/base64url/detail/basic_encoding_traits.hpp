@@ -38,7 +38,8 @@ struct basic_base64url_encoding_traits
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
 
-  static constexpr auto const padding_character = '=';
+  // for some reason, letting auto breaks on VS2019 and c++latest...
+  static constexpr char const padding_character = '=';
   static constexpr auto const padding_policy = PaddingPolicy;
 
   static constexpr int index_of(char c)
