@@ -78,7 +78,7 @@ jobs:
       run: brew install ninja
     - name: Build and test
       run: python $GITHUB_WORKSPACE/ci/run-ci.py build-and-test --profile $GITHUB_WORKSPACE/ci/conan-profiles/macos11
-  build-windows:
+  build-windows-cxx14:
     runs-on: windows-latest
     strategy:
       matrix:
@@ -105,7 +105,32 @@ jobs:
       run: |
         set CXX=cl
         "${{ matrix.vcvars_cmd }}" ${{ matrix.vcvars_args }} && python %GITHUB_WORKSPACE%/ci/run-ci.py build-and-test --profile %GITHUB_WORKSPACE%/ci/conan-profiles/${{ matrix.compiler }}
-
+  build-windows-cxx17:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler: [vs2019]
+        include:
+          - os: windows-latest
+            compiler: vs2019
+            vcvars_cmd: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat
+            vcvars_args: x64 10.0.18362.0
+    steps:
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install conan and path
+      run: pip install conan==$env:CONAN_VERSION path==$env:PATH_VERSION --user
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Install build tools
+      run: cinst ninja -y
+    - name: Build and test
+      shell: cmd
+      run: |
+        set CXX=cl
+        "${{ matrix.vcvars_cmd }}" ${{ matrix.vcvars_args }} && python %GITHUB_WORKSPACE%/ci/run-ci.py build-and-test --profile %GITHUB_WORKSPACE%/ci/conan-profiles/vs2019-cxx17
   build-windows-cxx20:
     runs-on: windows-latest
     strategy:
@@ -116,7 +141,6 @@ jobs:
             compiler: vs2019
             vcvars_cmd: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat
             vcvars_args: x64 10.0.18362.0
-
     steps:
     - name: Setup Python environment
       uses: actions/setup-python@v2
