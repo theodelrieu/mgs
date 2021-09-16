@@ -138,6 +138,34 @@ public:
   {
     return output_traits<T>::create(make_decoder(std::forward<Args>(args)...));
   }
+
+  template <typename T = default_encoded_output>
+  static auto lazy_encode()
+  {
+    return
+        [](auto&&... args)
+            -> codecs::codec_output<
+                decltype(output_traits<T>::create(
+                    make_encoder(std::forward<decltype(args)>(args)...))),
+                decltype(make_encoder(std::forward<decltype(args)>(args)...))> {
+          return output_traits<T>::create(
+              make_encoder(std::forward<decltype(args)>(args)...));
+        };
+  }
+
+  template <typename T = default_decoded_output>
+  static auto lazy_decode()
+  {
+    return
+        [](auto&&... args)
+            -> codecs::codec_output<
+                decltype(output_traits<T>::create(
+                    make_decoder(std::forward<decltype(args)>(args)...))),
+                decltype(make_decoder(std::forward<decltype(args)>(args)...))> {
+          return output_traits<T>::create(
+              make_decoder(std::forward<decltype(args)>(args)...));
+        };
+  }
 };
 }
 }
