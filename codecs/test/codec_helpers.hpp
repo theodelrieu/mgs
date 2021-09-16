@@ -57,7 +57,10 @@ template <typename Codec,
           typename Range2>
 void test_encode(Range1&& it, Range2&& expected)
 {
-  auto const encoded = Codec::template encode<CodecOutput>(it);
+  auto encoded = Codec::template encode<CodecOutput>(it);
+  check_equal(encoded, expected);
+
+  encoded = Codec::template lazy_encode<CodecOutput>()(it);
   check_equal(encoded, expected);
 }
 
@@ -68,7 +71,10 @@ template <typename Codec,
           typename Range>
 void test_encode(I i, S s, Range&& expected)
 {
-  auto const encoded = Codec::template encode<CodecOutput>(i, s);
+  auto encoded = Codec::template encode<CodecOutput>(i, s);
+  check_equal(encoded, expected);
+
+  encoded = Codec::template lazy_encode<CodecOutput>()(i, s);
   check_equal(encoded, expected);
 }
 
@@ -95,7 +101,10 @@ template <typename Codec,
           typename Range2>
 void test_decode(Range1&& it, Range2&& expected)
 {
-  auto const decoded = Codec::template decode<CodecOutput>(it);
+  auto decoded = Codec::template decode<CodecOutput>(it);
+  check_equal(decoded, expected);
+
+  decoded = Codec::template lazy_decode<CodecOutput>()(it);
   check_equal(decoded, expected);
 }
 
@@ -106,7 +115,10 @@ template <typename Codec,
           typename Range>
 void test_decode(I i, S s, Range&& expected)
 {
-  auto const decoded = Codec::template decode<CodecOutput>(i, s);
+  auto decoded = Codec::template decode<CodecOutput>(i, s);
+  check_equal(decoded, expected);
+
+  decoded = Codec::template lazy_decode<CodecOutput>()(i, s);
   check_equal(decoded, expected);
 }
 
